@@ -3,7 +3,7 @@ PROGRAM NAME - Calculator
 
 PROGRAMMER - Dominik Dierberger
 
-DATE - Started 25.01.2022
+DATE - Started 26.01.2022
 *******************************************************/
 
 import 'package:flutter/material.dart';
