@@ -1,28 +1,40 @@
+/*******************************************************
+PROGRAM NAME - Calculator
+
+PROGRAMMER - Dominik Dierberger
+
+DATE - Started 25.01.2022
+*******************************************************/
+
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 
+//starter Method
 void main(){
   runApp(Calculator());
 }
-  
+
+//set homepage and theme for the calculator
 class Calculator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Calculator',
-      theme: ThemeData(primarySwatch: Colors.lightBlue),
+      theme: ThemeData(primarySwatch: Colors.orange, scaffoldBackgroundColor: Colors.black),
       home: SimpleCalculator(),
     );
   }
 }
 
+//this page will display the old equations and their results
 class OldEquations extends StatelessWidget {
   const OldEquations({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text('Old Equations'),
       ),
@@ -30,7 +42,7 @@ class OldEquations extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            for(var item in oldEquations ) Text(item)
+            for(var item in oldEquations ) Text(item,style: TextStyle(fontSize: 20,color: Colors.white),)
           ],
         ),
       ),
@@ -38,6 +50,8 @@ class OldEquations extends StatelessWidget {
   }
 }
 
+//this page will display an error if the user decides
+// to view the old equations page without any old equations Existing
 class ErrorPage extends StatelessWidget {
   const ErrorPage({Key? key}) : super(key: key);
 
@@ -45,24 +59,26 @@ class ErrorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Old Equations'),
+        title: const Text('Error'),
       ),
-      body: Center(
+      body: const Center(
 
-        child: Text("There are no old Equations"),
+        child: Text("There are no old Equations",style: TextStyle(fontSize: 30,color: Colors.white),),
       ),
     );
   }
 }
 
-
+//this class will update the Simple calculator page
 class SimpleCalculator extends StatefulWidget {
   @override
   _SimpleCalculatorState createState() => _SimpleCalculatorState();
 }
 
+//this list holds all the old equations
 List<String> oldEquations = [];
 
+//this class will display the calculator page and control the button mechanic
 class _SimpleCalculatorState extends State<SimpleCalculator> {
 
   String equation = "0";
@@ -70,6 +86,7 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
   String expression = "";
   double equationFontSize = 38.0;
   double resultFontSize = 48.0;
+  Color fontColor = Colors.white;
 
   //function to update the number if a button is pressed
   buttonPressed(String buttonText){
@@ -82,7 +99,7 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
         resultFontSize = 48.0;
       }
       //backspace
-      else if(buttonText == "back"){
+      else if(buttonText == "←"){
         equationFontSize = 48.0;
         resultFontSize = 38.0;
         equation = equation.substring(0, equation.length - 1);
@@ -127,7 +144,7 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
             MaterialPageRoute(builder: (context) => const ErrorPage()),
           );
         }
-        else if(oldEquations.length >= 1){
+        else if(oldEquations.isNotEmpty){
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const OldEquations()),
@@ -154,17 +171,17 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
       child: FlatButton(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(0.0),
-              side: BorderSide(
+              side: const BorderSide(
                   color: Colors.white,
                   width: 1,
                   style: BorderStyle.solid
               )
           ),
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           onPressed: () => buttonPressed(buttonText),
           child: Text(
             buttonText,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 30.0,
                 fontWeight: FontWeight.normal,
                 color: Colors.white
@@ -178,28 +195,23 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Simple Calculator')),
+      appBar: AppBar(title: const Text('Simple Calculator')),
       body: Column(
         children: <Widget>[
-
-          Container(
-            alignment: Alignment.topLeft,
-            child: buildButton("old", 1, Colors.redAccent),
-          ),
-
           Container(
             alignment: Alignment.centerRight,
-            padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
-            child: Text(result, style: TextStyle(fontSize: resultFontSize),),
+            padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
+            child: Text(result,
+              style: TextStyle(fontSize: resultFontSize,color: Colors.white),),
           ),
 
           Container(
             alignment: Alignment.topRight,
-            padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
-            child: Text(equation, style: TextStyle(fontSize: equationFontSize),),
+            padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+            child: Text(equation, style: TextStyle(fontSize: equationFontSize,color: Colors.white),),
           ),
 
-          Expanded(
+          const Expanded(
             child: Divider(),
           ),
 
@@ -213,9 +225,10 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
                   children: [
                     TableRow(
                         children: [
-                          buildButton("C", 1, Colors.redAccent),
-                          buildButton("back", 1, Colors.blue),
-                          buildButton("/", 1, Colors.blue),
+                          buildButton("C", 1, Colors.orange),
+                          buildButton("*", 1, Colors.black),
+                          buildButton("/", 1, Colors.black),
+
                         ]
                     ),
 
@@ -247,7 +260,7 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
                         children: [
                           buildButton(".", 1, Colors.black54),
                           buildButton("0", 1, Colors.black54),
-                          buildButton("00", 1, Colors.black54),
+                            buildButton("old", 1, Colors.orange),
                         ]
                     ),
                   ],
@@ -261,25 +274,25 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
                   children: [
                     TableRow(
                         children: [
-                          buildButton("*", 1, Colors.blue),
+                          buildButton("←", 1, Colors.orange),
                         ]
                     ),
 
                     TableRow(
                         children: [
-                          buildButton("-", 1, Colors.blue),
+                          buildButton("-", 1, Colors.black),
                         ]
                     ),
 
                     TableRow(
                         children: [
-                          buildButton("+", 1, Colors.blue),
+                          buildButton("+", 1, Colors.black),
                         ]
                     ),
 
                     TableRow(
                         children: [
-                          buildButton("=", 2, Colors.redAccent),
+                          buildButton("=", 2, Colors.orange),
                         ]
                     ),
                   ],
@@ -287,7 +300,6 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
               )
             ],
           ),
-
         ],
       ),
     );
